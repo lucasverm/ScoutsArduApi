@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ScoutsArduAPI.DTO
 {
-    public class GebruikerDTO
+    public class GebruikerExportDTO
     {
         public string Voornaam { get; set; }
         public string Achternaam { get; set; }
@@ -15,7 +15,7 @@ namespace ScoutsArduAPI.DTO
         public string Foto { get; set; }
         public GebruikerType Type { get; set; }
 
-        public GebruikerDTO(Gebruiker g)
+        public GebruikerExportDTO(Gebruiker g)
         {
             this.Voornaam = g.Voornaam;
             this.Achternaam = g.Achternaam;

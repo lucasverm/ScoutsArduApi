@@ -20,7 +20,7 @@ namespace ScoutsArduAPI.DTO
         public string PasswordConfirmation { get; set; }
         [Required]
         public string Foto { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter a type")]
         public GebruikerType Type { get; set; }
     }
 }

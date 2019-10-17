@@ -8,7 +8,7 @@ namespace ScoutsArduAPI.Models
 {
     public interface IGebruikerRepository
     {
-        Gebruiker GetBy(string id);
+        Gebruiker GetBy(string email);
         Gebruiker GetByType(GebruikerType gebruikerType);
         IEnumerable<Gebruiker> GetAll();
         void Add(Gebruiker gebruiker);

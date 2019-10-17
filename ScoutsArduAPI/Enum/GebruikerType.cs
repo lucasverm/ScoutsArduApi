@@ -7,6 +7,6 @@ namespace ScoutsArduAPI.Enum
 {
     public enum GebruikerType
     {
-        Undefined, Leider, Lid, Adminisrator
+        Undefined, Leiding, Stam, Admin
     }
 }
