@@ -13,8 +13,8 @@ namespace ScoutsArduAPI.Models
 
         private string _voornaam;
         private string _achternaam;
-        private string _email;
         private string _foto;
+        private string _email;
         private GebruikerType _gebruikerType;
 
 
@@ -67,7 +67,7 @@ namespace ScoutsArduAPI.Models
         public GebruikerType Type {
             get { return _gebruikerType; }
             set {
-                if (value == GebruikerType.Undefined)
+                if (false/*value == GebruikerType.Undefined*/)
                 {
                     throw new ArgumentException("Selecteer het soort gebruiker");
                 }
@@ -77,9 +77,12 @@ namespace ScoutsArduAPI.Models
                 }
             }
         }
+
+        public List<Winkelwagen> Winkelwagens { get; set; }
+
         public Gebruiker()
         {
-            
+
         }
 
         public Gebruiker(string voornaam, string achternaam, string email, string foto, GebruikerType type) : this()

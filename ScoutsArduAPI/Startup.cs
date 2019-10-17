@@ -103,6 +103,8 @@ namespace ScoutsArduAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<IGebruikerRepository, GebruikerRepository>();
+            services.AddScoped<IWinkelwagenRepository, WinkelwagenRepository>();
+            services.AddScoped<IWinkelwagenItemRepository, WinkelwagenItemRepository>();
             services.AddScoped<ApplicationDataInitialiser>();
 
             services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));

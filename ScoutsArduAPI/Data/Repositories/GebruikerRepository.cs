@@ -35,9 +35,9 @@ namespace kolveniershofBackend.Data.Repositories
             return _gebruikers.ToList();
         }
 
-        public Gebruiker GetBy(string id)
+        public Gebruiker GetBy(string email)
         {
-            return _gebruikers.SingleOrDefault(r => r.Id == id);
+            return _gebruikers.Include(g => g.Winkelwagens).SingleOrDefault(r => r.Email == email);
         }
 
         public Gebruiker GetByType(GebruikerType gebruikerType)

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,7 @@ namespace ScoutsArduAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    [AllowAnonymous]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
         private readonly SignInManager<Gebruiker> _signInManager;
@@ -33,14 +35,30 @@ namespace ScoutsArduAPI.Controllers
             _gebruikerRepository = gebruikerRepository;
             _config = config;
         }
+        /// <summary>
+        /// Geeft winkelwagens van een specifieke gebruiker
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Winkelwagens</returns>
+        
+        [HttpGet("winkelwagens")]
+        public ActionResult<IEnumerable<Winkelwagen>> GetWinkelwagensOfGebruiker()
+        {
+            Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
+            if (g == null) return NotFound();
+            return g.Winkelwagens;
+        }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> CreateToken(LoginDTO model)
         {
-            var user = await _userManager.FindByNameAsync(model.Email);
-
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            Debug.WriteLine("-------------- in login------");
             if (user != null)
             {
+                Debug.WriteLine("--------------user juist------");
+
                 var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
                 if (result.Succeeded)
@@ -48,6 +66,9 @@ namespace ScoutsArduAPI.Controllers
                     string token = GetToken(user);
                     return Created("", token); //returns only the token                   
                 }
+            } else
+            {
+                Debug.WriteLine("--------------user fout------");
             }
             return BadRequest();
         }
@@ -67,6 +88,7 @@ namespace ScoutsArduAPI.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> Register(RegisterDTO model)
         {
             Gebruiker g = new Gebruiker
@@ -91,11 +113,11 @@ namespace ScoutsArduAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<GebruikerDTO> GetGebruiker(string id)
+        public ActionResult<IEnumerable<Winkelwagen>> GetGebruiker(string id)
         {
-            GebruikerDTO g = new GebruikerDTO(_gebruikerRepository.GetBy(id));
+            Gebruiker g = _gebruikerRepository.GetBy(id);
             if (g == null) return NotFound();
-            return g;
+            return g.Winkelwagens;
         }
 
         [HttpDelete("{id}")]
@@ -111,10 +133,11 @@ namespace ScoutsArduAPI.Controllers
             return g;
         }
 
-        [HttpGet]
-        public IEnumerable<GebruikerDTO> GetGebruikers()
+        [HttpGet("allUsers")]
+        [AllowAnonymous]
+        public IEnumerable<Gebruiker> GetGebruikers()
         {
-            return _gebruikerRepository.GetAll().ToList().Select(g => new GebruikerDTO(g));
+            return _gebruikerRepository.GetAll().ToList();
         }
 
         [HttpPut("{id}")]
@@ -125,15 +148,8 @@ namespace ScoutsArduAPI.Controllers
                 return BadRequest();
             _gebruikerRepository.Update(gebruiker);
             _gebruikerRepository.SaveChanges();
-            return NoContent();
+            return g;
         }
-
-        [HttpPost]
-        public ActionResult<Gebruiker> PostGebruiker(Gebruiker gebruiker)
-        {
-            _gebruikerRepository.Add(gebruiker);
-            _gebruikerRepository.SaveChanges();
-            return CreatedAtAction(nameof(GetGebruiker), gebruiker.Id);
-        }
+    
     }
 }

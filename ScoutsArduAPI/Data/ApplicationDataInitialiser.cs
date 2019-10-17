@@ -24,7 +24,11 @@ namespace ScoutsArduAPI.Data
             if (_dbContext.Database.EnsureCreated())
             {
                 Gebruiker g = new Gebruiker();
-                await _userManager.CreateAsync(g, "Test123!");
+                g.Voornaam = "VoornaamLucas";
+                g.Achternaam = "AchternaamLucas";
+                g.Email = "user@example.com";
+                g.Type = Enum.GebruikerType.Admin;
+                await _userManager.CreateAsync(g, "Test123!123!");
                 _dbContext.SaveChanges();
 
             }

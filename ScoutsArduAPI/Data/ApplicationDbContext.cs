@@ -11,6 +11,8 @@ namespace ScoutsArduAPI.Data
     {
 
         public DbSet<Gebruiker> Gebruikers { get; set; }
+        public DbSet<Winkelwagen> Winkelwagens { get; set; }
+        public DbSet<WinkelwagenItem> WinkelwagenItems { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
