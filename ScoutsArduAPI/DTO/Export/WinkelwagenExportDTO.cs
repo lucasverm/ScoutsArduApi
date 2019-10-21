@@ -18,7 +18,8 @@ namespace ScoutsArduAPI.DTO
         {
             this.Id = w.Id;
             this.Datum = w.Datum;
-            this.Items = w.Items.Select(t => new WinkelwagenItemExportDTO(t)).ToList();
+            this.Items = new List<WinkelwagenItemExportDTO>();
+            this.Items.AddRange(w.Items.Select(t => new WinkelwagenItemExportDTO(t)).ToList());
             this.Betaald = w.Betaald;
             this.Gebruiker = new GebruikerExportDTO(w.Gebruiker);
         }

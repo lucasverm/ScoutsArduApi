@@ -57,7 +57,7 @@ namespace ScoutsArduAPI.Controllers
         {
             Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
             if (g == null) return NotFound();
-            return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(t)).ToList();
+            return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
         }
 
 

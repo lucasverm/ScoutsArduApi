@@ -41,11 +41,8 @@ namespace ScoutsArduAPI.Controllers
         public async Task<ActionResult<string>> CreateToken(LoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            Debug.WriteLine("-------------- in login------");
             if (user != null)
             {
-                Debug.WriteLine("--------------user juist------");
-
                 var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
                 if (result.Succeeded)
@@ -53,10 +50,7 @@ namespace ScoutsArduAPI.Controllers
                     string token = GetToken(user);
                     return Created("", token); //returns only the token                   
                 }
-            } else
-            {
-                Debug.WriteLine("--------------user fout------");
-            }
+            } 
             return BadRequest();
         }
 
@@ -100,15 +94,15 @@ namespace ScoutsArduAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<Winkelwagen>> GetGebruiker(string id)
+        public ActionResult<GebruikerExportDTO> GetGebruiker(string id)
         {
             Gebruiker g = _gebruikerRepository.GetBy(id);
             if (g == null) return NotFound();
-            return g.Winkelwagens;
+            return new GebruikerExportDTO(g);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Gebruiker> VerwijderGebruiker(string id)
+        public ActionResult<GebruikerExportDTO> VerwijderGebruiker(string id)
         {
             Gebruiker g = _gebruikerRepository.GetBy(id);
             if (g == null)
@@ -117,25 +111,25 @@ namespace ScoutsArduAPI.Controllers
             }
             _gebruikerRepository.Delete(g);
             _gebruikerRepository.SaveChanges();
-            return g;
+            return new GebruikerExportDTO(g);
         }
 
         [HttpGet("allUsers")]
         [AllowAnonymous]
-        public IEnumerable<Gebruiker> GetGebruikers()
+        public IEnumerable<GebruikerExportDTO> GetGebruikers()
         {
-            return _gebruikerRepository.GetAll().ToList();
+            return _gebruikerRepository.GetAll().Select(g => new GebruikerExportDTO(g)).ToList();
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Gebruiker> PutGebruiker(string id, Gebruiker gebruiker)
+        public ActionResult<GebruikerExportDTO> PutGebruiker(string id, Gebruiker gebruiker)
         {
             Gebruiker g = _gebruikerRepository.GetBy(id);
             if (!g.Id.Equals(id))
                 return BadRequest();
             _gebruikerRepository.Update(gebruiker);
             _gebruikerRepository.SaveChanges();
-            return g;
+            return new GebruikerExportDTO(g);
         }
     
     }
