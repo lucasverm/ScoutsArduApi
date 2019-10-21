@@ -34,20 +34,7 @@ namespace ScoutsArduAPI.Controllers
             _userManager = userManager;
             _gebruikerRepository = gebruikerRepository;
             _config = config;
-        }
-        /// <summary>
-        /// Geeft winkelwagens van een specifieke gebruiker
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>Winkelwagens</returns>
-        
-        [HttpGet("winkelwagens")]
-        public ActionResult<IEnumerable<Winkelwagen>> GetWinkelwagensOfGebruiker()
-        {
-            Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
-            if (g == null) return NotFound();
-            return g.Winkelwagens;
-        }
+        }      
 
         [HttpPost("login")]
         [AllowAnonymous]

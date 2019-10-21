@@ -23,6 +23,18 @@ namespace ScoutsArduAPI.Data
             _dbContext.Database.EnsureDeleted();
             if (_dbContext.Database.EnsureCreated())
             {
+                WinkelwagenItem item1 = new WinkelwagenItem
+                {
+                    Naam = "Cola",
+                    Prijs = 1
+                };
+                _dbContext.WinkelwagenItems.Add(item1);
+                WinkelwagenItem item2 = new WinkelwagenItem
+                {
+                    Naam = "Bier",
+                    Prijs = 2
+                };
+                _dbContext.WinkelwagenItems.Add(item2);
                 Gebruiker g = new Gebruiker();
                 g.Voornaam = "VoornaamLucas";
                 g.Achternaam = "AchternaamLucas";

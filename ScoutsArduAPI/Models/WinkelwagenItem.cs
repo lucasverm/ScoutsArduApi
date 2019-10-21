@@ -10,5 +10,7 @@ namespace ScoutsArduAPI.Models
         public int Id { get; set; }
         public String Naam { get; set; }
         public float Prijs { get; set; }
+        public int Aantal { get; set; }
+        public List<Winkelwagen> Winkelwagens { get; set; }
     }
 }

@@ -13,35 +13,60 @@ namespace kolveniershofBackend.Data.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<Winkelwagen> _winkelwagen;
-        private readonly IWinkelwagenItemRepository _winkewagenItemRepository;
+        private readonly DbSet<MTMWinkelwagenWinkelwagenItem> _mtm;
 
-        public WinkelwagenRepository(ApplicationDbContext dbContext, IWinkelwagenItemRepository WinkelwagenItemRepository)
+        public WinkelwagenRepository(ApplicationDbContext dbContext)
         {
             _context = dbContext;
             _winkelwagen = dbContext.Winkelwagens;
-            _winkewagenItemRepository = WinkelwagenItemRepository;
+            _mtm = dbContext.MTMWinkelwagenWinkelwagenItems;
         }
 
         public void Add(Winkelwagen winkelwagen)
         {
-            winkelwagen.Items.ForEach(w => _winkewagenItemRepository.Add(w));
-            _winkewagenItemRepository.SaveChanges();
-            _winkelwagen.Add(winkelwagen); 
+            winkelwagen.Items.ForEach(wi =>
+            {
+                _mtm.Add(new MTMWinkelwagenWinkelwagenItem(winkelwagen, wi));
+            });
+            _winkelwagen.Add(winkelwagen);
         }
 
         public void Delete(Winkelwagen winkelwagen)
         {
+            //alle mtm's verwijderen
+            _mtm.Where(t => t.Winkelwagen == winkelwagen).ToList().ForEach(rel => _mtm.Remove(rel));
             _winkelwagen.Remove(winkelwagen);
         }
 
         public IEnumerable<Winkelwagen> GetAll()
         {
-            return _winkelwagen.ToList();
+            List<Winkelwagen> alleWinkelwagens = _winkelwagen.ToList();
+            alleWinkelwagens.ForEach(w =>
+            {
+                w.Items = new List<WinkelwagenItem>();
+                _mtm.Where(k => k.Winkelwagen == w).Include(l => l.Winkelwagen).Include(l => l.WinkelwagenItem).ToList().ForEach(t =>
+                {
+                    w.Items.Add(t.WinkelwagenItem);
+                });
+            });
+            return alleWinkelwagens;
         }
 
         public Winkelwagen GetBy(int id)
         {
-            return _winkelwagen.Include(t => t.Items).SingleOrDefault(r => r.Id == id);
+            Winkelwagen w = _winkelwagen.SingleOrDefault(t => t.Id == id);
+            if (w == null)
+            {
+                return null;
+            }
+            w.Items = new List<WinkelwagenItem>();
+            _mtm.Where(a => a.Winkelwagen == w).Include(i => i.Winkelwagen).Include(p => p.WinkelwagenItem).ToList().ForEach(t =>
+            {
+                //veranderd
+                w.Items.Add(t.WinkelwagenItem);
+            });
+
+            return w;
         }
 
         public void SaveChanges()
@@ -51,6 +76,16 @@ namespace kolveniershofBackend.Data.Repositories
 
         public void Update(Winkelwagen winkelwagen)
         {
+            //verwijder alle mtm's
+            _mtm.Where(t => t.Winkelwagen == winkelwagen).ToList().ForEach(mtm => _mtm.Remove(mtm));
+
+            //alle mtm's van deze ww opnieuw toevoegen
+            winkelwagen.Items.ForEach(wi =>
+            {
+                _mtm.Add(new MTMWinkelwagenWinkelwagenItem(winkelwagen, wi));
+            });
+            _winkelwagen.Update(winkelwagen);
+            SaveChanges();
             _context.Update(winkelwagen);
         }
     }
