@@ -20,9 +20,10 @@ namespace ScoutsArduAPI.Data
 
         public async Task InitializeData()
         {
-            _dbContext.Database.EnsureDeleted();
-            if (_dbContext.Database.EnsureCreated())
-            {
+            // _dbContext.Database.EnsureDeleted();
+            //if (_dbContext.Database.EnsureCreated())
+            //{
+            if (!_dbContext.Winkelwagens.Any()) { 
                 WinkelwagenItem item1 = new WinkelwagenItem
                 {
                     Naam = "Cola",
