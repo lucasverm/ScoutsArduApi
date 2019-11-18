@@ -32,7 +32,10 @@ namespace kolveniershofBackend.Data.Repositories
 
         public IEnumerable<WinkelwagenItem> GetAll()
         {
-            return _winkelwagenItem.ToList();
+            return _winkelwagenItem.ToList().Select(t => {
+                t.Aantal = 0;
+                return t;
+            }).ToList();
         }
 
         public WinkelwagenItem GetBy(int id)

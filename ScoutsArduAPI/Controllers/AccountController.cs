@@ -93,10 +93,10 @@ namespace ScoutsArduAPI.Controllers
             return BadRequest();
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<GebruikerExportDTO> GetGebruiker(string id)
+        [HttpGet]
+        public ActionResult<GebruikerExportDTO> GetGebruiker()
         {
-            Gebruiker g = _gebruikerRepository.GetBy(id);
+            Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
             if (g == null) return NotFound();
             return new GebruikerExportDTO(g);
         }

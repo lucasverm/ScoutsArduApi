@@ -67,6 +67,13 @@ namespace ScoutsArduAPI.Controllers
             return _winkelwagenRepository.GetAll().OrderBy(t => t.Datum).ToList();
         }
 
+        [AllowAnonymous]
+        [HttpGet("WinkelwagenItems")]
+        public ActionResult<IEnumerable<WinkelwagenItem>> GetWinkelwagenItems()
+        {
+            return _winkelwagenItemRepository.GetAll().ToList();
+        }
+
         [HttpPost]
         public ActionResult<WinkelwagenExportDTO> PostWinkelwagen(WinkelwagenDTO winkelwagenDTO)
         {
