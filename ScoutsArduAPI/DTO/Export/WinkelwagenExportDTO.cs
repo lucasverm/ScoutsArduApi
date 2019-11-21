@@ -9,7 +9,7 @@ namespace ScoutsArduAPI.DTO
     public class WinkelwagenExportDTO
     {
         public int Id { get; set; }
-        public DateTime Datum { get; set; }
+        public String Datum { get; set; }
         public List<WinkelwagenItemExportDTO> Items { get; set; }
         public Boolean Betaald { get; set; }
         public GebruikerExportDTO Gebruiker { get; set; }

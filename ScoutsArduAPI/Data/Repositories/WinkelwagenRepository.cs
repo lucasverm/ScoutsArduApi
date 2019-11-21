@@ -74,7 +74,8 @@ namespace kolveniershofBackend.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Winkelwagen winkelwagen)
+        public void Update
+            (Winkelwagen winkelwagen)
         {
             //verwijder alle mtm's
             _mtm.Where(t => t.Winkelwagen == winkelwagen).ToList().ForEach(mtm => _mtm.Remove(mtm));

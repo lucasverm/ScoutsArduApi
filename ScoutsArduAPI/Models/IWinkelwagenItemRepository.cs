@@ -12,7 +12,7 @@ namespace ScoutsArduAPI.Models
         IEnumerable<WinkelwagenItem> GetAll();
         void Add(WinkelwagenItem winkelwagenItem);
         void Delete(WinkelwagenItem winkelwagenItem);
-        void Update(WinkelwagenItem winkelwagenItem);
+        void Update (WinkelwagenItem winkelwagenItem);
         void SaveChanges();
     }
 }

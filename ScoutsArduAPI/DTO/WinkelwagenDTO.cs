@@ -10,5 +10,6 @@ namespace ScoutsArduAPI.DTO
     {
         public List<WinkelwagenItemDTO> Items { get; set; }
         public Boolean Betaald { get; set; }
-    }
+        public String Datum { get; set; }
+}
 }

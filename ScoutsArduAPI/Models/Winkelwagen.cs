@@ -10,7 +10,7 @@ namespace ScoutsArduAPI.Models
         public int Id { get; set; }
         public List<WinkelwagenItem> Items { get; set; }
         public Boolean Betaald { get; set; }
-        public DateTime Datum { get; set; }
+        public String Datum { get; set; }
         public Gebruiker Gebruiker { get; set; }
 
         public Winkelwagen()
@@ -21,7 +21,6 @@ namespace ScoutsArduAPI.Models
         public Winkelwagen(Gebruiker g)
         {
             this.Gebruiker = g;
-            this.Datum = DateTime.Now;
         }
     }
 }
