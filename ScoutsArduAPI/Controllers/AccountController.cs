@@ -34,7 +34,19 @@ namespace ScoutsArduAPI.Controllers
             _userManager = userManager;
             _gebruikerRepository = gebruikerRepository;
             _config = config;
-        }      
+        }
+
+        [HttpPost("logout")]
+        public async Task<ActionResult<string>> LogUit()
+        {
+            Gebruiker user = _gebruikerRepository.GetBy(User.Identity.Name);
+            if (user != null)
+            {
+                await _signInManager.SignOutAsync();
+                return Ok("uitgelogd");
+            }
+            return BadRequest();
+        }
 
         [HttpPost("login")]
         [AllowAnonymous]
@@ -54,7 +66,64 @@ namespace ScoutsArduAPI.Controllers
             return BadRequest();
         }
 
-        private string GetToken(Gebruiker g)
+        [HttpPost("facebooklogin")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> loginFacebookUser(FacebookLoginDTO model)
+        {
+            try
+            {
+
+
+                Gebruiker user = _gebruikerRepository.GetBy(model.Email);
+
+                if (user != null)
+                {
+                    try
+                    {
+                        Debug.WriteLine(user);
+                        //await _signInManager.SignInAsync(user, true);
+                        string token = GetToken(user);
+                        return Created("", token); //returns only the token  
+                    }
+
+                    catch (Exception e)
+                    {
+                        return BadRequest(e.Message);
+                    }
+                }
+                else
+                {
+                    Gebruiker g = new Gebruiker
+                    {
+                        Email = model.Email,
+                        Voornaam = model.Voornaam,
+                        Achternaam = model.Achternaam,
+                        //Foto = model.Foto,
+                        Type = Enum.GebruikerType.Leiding,
+                        UserName = model.Email,
+                        //TelNr = model.TelNr
+                        IsFacebookUser = true
+                    };
+
+                    var result = await _userManager.CreateAsync(g);
+
+                    if (result.Succeeded)
+                    {
+                        _gebruikerRepository.SaveChanges();
+                        string token = GetToken(g);
+                        return Created("", token);
+                    }
+                    return BadRequest();
+
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+            private string GetToken(Gebruiker g)
         {      // Createthetoken
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, g.Email),
@@ -79,7 +148,8 @@ namespace ScoutsArduAPI.Controllers
                 Achternaam = model.Achternaam,
                 Foto = model.Foto,
                 Type = model.Type,
-                UserName = model.Email
+                UserName = model.Email,
+                TelNr = model.TelNr
             };
 
             var result = await _userManager.CreateAsync(g, model.Password);
@@ -121,13 +191,14 @@ namespace ScoutsArduAPI.Controllers
             return _gebruikerRepository.GetAll().Select(g => new GebruikerExportDTO(g)).ToList();
         }
 
-        [HttpPut("{id}")]
-        public ActionResult<GebruikerExportDTO> PutGebruiker(string id, Gebruiker gebruiker)
+        [HttpPut]
+        public ActionResult<GebruikerExportDTO> PutGebruiker(string voornaam, string achternaam, string telnr)
         {
-            Gebruiker g = _gebruikerRepository.GetBy(id);
-            if (!g.Id.Equals(id))
-                return BadRequest();
-            _gebruikerRepository.Update(gebruiker);
+            Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
+            g.Achternaam = achternaam;
+            g.Voornaam = voornaam;
+            g.TelNr = telnr;
+            _gebruikerRepository.Update(g);
             _gebruikerRepository.SaveChanges();
             return new GebruikerExportDTO(g);
         }

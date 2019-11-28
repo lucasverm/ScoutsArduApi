@@ -12,6 +12,8 @@ namespace ScoutsArduAPI.DTO
         public string Voornaam { get; set; }
         public string Achternaam { get; set; }
         public string Email { get; set; }
+
+        public string TelNr { get; set; }
         public string Foto { get; set; }
         public GebruikerType Type { get; set; }
 
@@ -22,6 +24,7 @@ namespace ScoutsArduAPI.DTO
             this.Foto = g.Foto;
             this.Email = g.Email;
             this.Type = g.Type;
+            this.TelNr = g.TelNr ?? "";
 
 
 

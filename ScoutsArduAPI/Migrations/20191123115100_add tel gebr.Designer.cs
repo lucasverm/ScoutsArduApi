@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoutsArduAPI.Data;
 
 namespace ScoutsArduAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191123115100_add tel gebr")]
+    partial class addtelgebr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace ScoutsArduAPI.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("Foto");
-
-                    b.Property<bool>("IsFacebookUser");
 
                     b.Property<bool>("LockoutEnabled");
 

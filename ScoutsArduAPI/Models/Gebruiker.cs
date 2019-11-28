@@ -15,6 +15,8 @@ namespace ScoutsArduAPI.Models
         private string _achternaam;
         private string _foto;
         private string _email;
+        private string _telNr;
+        private Boolean _IsFacebookUser = false;
         private GebruikerType _gebruikerType;
 
 
@@ -26,6 +28,24 @@ namespace ScoutsArduAPI.Models
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("Een gebruiker moet een voornaam hebben");
                 _voornaam = value;
+            }
+        }
+
+        public Boolean IsFacebookUser {
+            get {
+                return _IsFacebookUser;
+            }
+            set {
+                _IsFacebookUser = value;
+            }
+        }
+
+        public string TelNr {
+            get {
+                return _telNr;
+            }
+            set {
+                _telNr = value;
             }
         }
 
@@ -85,13 +105,14 @@ namespace ScoutsArduAPI.Models
 
         }
 
-        public Gebruiker(string voornaam, string achternaam, string email, string foto, GebruikerType type) : this()
+        public Gebruiker(string voornaam, string achternaam, string email, string foto, string telnr, GebruikerType type) : this()
         {
             Voornaam = voornaam;
             Achternaam = achternaam;
             Email = email;
             Type = type;
             Foto = foto;
+            TelNr = telnr;
             UserName = email;
         }
 
