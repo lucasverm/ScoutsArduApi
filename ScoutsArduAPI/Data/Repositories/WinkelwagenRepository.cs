@@ -40,7 +40,7 @@ namespace kolveniershofBackend.Data.Repositories
 
         public IEnumerable<Winkelwagen> GetAll()
         {
-            List<Winkelwagen> alleWinkelwagens = _winkelwagen.ToList();
+            List<Winkelwagen> alleWinkelwagens = _winkelwagen.Include(t => t.Gebruiker).ToList();
             alleWinkelwagens.ForEach(w =>
             {
                 w.Items = new List<WinkelwagenItem>();
