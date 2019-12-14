@@ -52,6 +52,18 @@ namespace ScoutsArduAPI.Controllers
             return w;
         }
 
+        [AllowAnonymous]
+        [HttpDelete("DeleteAlleWinkelwagens")]
+        public ActionResult VerwijderAlleWinkelwagen()
+        {
+            foreach (Winkelwagen winkelwagen in _winkelwagenRepository.GetAll())
+            {
+                _winkelwagenRepository.Delete(winkelwagen);
+            }
+            _winkelwagenRepository.SaveChanges();
+            return Ok();
+        }
+
         [HttpGet("winkelwagens")]
         public ActionResult<IEnumerable<WinkelwagenExportDTO>> GetWinkelwagensOfGebruiker()
         {
@@ -60,14 +72,13 @@ namespace ScoutsArduAPI.Controllers
             return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
         }
 
-        [HttpGet("eerste")]
+        /*[HttpGet("eerste")]
         public ActionResult<WinkelwagenExportDTO> GetEerste()
         {
             Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
             if (g == null) return NotFound();
             return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList().Last();
-        }
-
+        }*/
 
         [HttpGet("stamhistoriek")]
         public ActionResult<IEnumerable<Winkelwagen>> stamHistoriek()
@@ -100,7 +111,7 @@ namespace ScoutsArduAPI.Controllers
                 Items = items,
                 Datum = winkelwagenDTO.Datum,
                 Betaald = winkelwagenDTO.Betaald,
-                Gebruiker = _gebruikerRepository.GetBy(User.Identity.Name)
+                Gebruiker = _gebruikerRepository.GetBy(User.Identity.Name)   
             };
     
             _winkelwagenRepository.Add(winkelwagen);
