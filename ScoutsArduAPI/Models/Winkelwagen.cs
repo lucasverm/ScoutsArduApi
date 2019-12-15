@@ -10,7 +10,7 @@ namespace ScoutsArduAPI.Models
         public int Id { get; set; }
         public List<MTMWinkelwagenWinkelwagenItem> Items { get; set; }
         public Boolean Betaald { get; set; }
-        public String Datum { get; set; }
+        public DateTime Datum { get; set; }
         public Gebruiker Gebruiker { get; set; }
 
         public Winkelwagen()

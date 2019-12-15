@@ -9,10 +9,5 @@ namespace ScoutsArduAPI.DTO
     public class WinkelwagenItemDTO
     {
         public int Id { get; set; }
-        public int Aantal { get; set; }
-        public WinkelwagenItemDTO()
-        {
-
-        }
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ScoutsArduAPI.DTO
 {
-    public class WinkelwagenItemMtmDTO
+    public class WinkelwagenItemMtmExportDTO
     {
         public int Id { get; set; }
         public WinkelwagenItemExportDTO Item { get; set; }
         public int Aantal { get; set; }
 
-        public WinkelwagenItemMtmDTO(MTMWinkelwagenWinkelwagenItem mtm)
+        public WinkelwagenItemMtmExportDTO(MTMWinkelwagenWinkelwagenItem mtm)
         {
             this.Id = mtm.Id;
             this.Aantal = mtm.aantal;

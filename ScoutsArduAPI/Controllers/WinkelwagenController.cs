@@ -94,9 +94,9 @@ namespace ScoutsArduAPI.Controllers
             List<MTMWinkelwagenWinkelwagenItem> items = new List<MTMWinkelwagenWinkelwagenItem>();
             foreach( var item in winkelwagenDTO.Items)
             {
-                WinkelwagenItem wi = _winkelwagenItemRepository.GetBy(item.Id);
+                WinkelwagenItem wi = _winkelwagenItemRepository.GetBy(item.item.Id);
                 if (wi == null)
-                    return NotFound("het winkelwagenItem met id = " + item.Id.ToString() + " kon niet worden gevonden");
+                    return NotFound("het winkelwagenItem met id = " + item.item.Id.ToString() + " kon niet worden gevonden");
                 MTMWinkelwagenWinkelwagenItem m = new MTMWinkelwagenWinkelwagenItem();
                 m.aantal = item.Aantal;
                 m.WinkelwagenItem = wi;
@@ -106,7 +106,7 @@ namespace ScoutsArduAPI.Controllers
             Winkelwagen winkelwagen = new Winkelwagen
             {
                 Items = items,
-                Datum = winkelwagenDTO.Datum,
+                Datum = new DateTime(),
                 Betaald = winkelwagenDTO.Betaald,
                 Gebruiker = _gebruikerRepository.GetBy(User.Identity.Name)   
             };

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ScoutsArduAPI.DTO
 {
-    public class WinkelwagenDTO
+    public class WinkelwagenItemMtmDTO
     {
         [Required]
-        public List<WinkelwagenItemMtmDTO> Items { get; set; }
-        public Boolean Betaald { get; set; }
-        public String Datum { get; set; }
-}
+        public WinkelwagenItemDTO item { get; set; }
+        public int Aantal { get; set; }
+       
+    }
 }
