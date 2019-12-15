@@ -70,14 +70,14 @@ namespace ScoutsArduAPI.Controllers
             Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
             if (g == null) return NotFound();
 
-            return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
+            return g.Winkelwagens.OrderByDescending(t => t.Datum).Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
         
         }
 
         [HttpGet("stamhistoriek")]
         public ActionResult<IEnumerable<WinkelwagenExportDTO>> stamHistoriek()
         {
-            var winkelwagens = _winkelwagenRepository.GetAll().OrderBy(t => t.Datum).ToList();
+            var winkelwagens = _winkelwagenRepository.GetAll().OrderByDescending(t => t.Datum).ToList();
             return winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
         }
 
@@ -106,7 +106,7 @@ namespace ScoutsArduAPI.Controllers
             Winkelwagen winkelwagen = new Winkelwagen
             {
                 Items = items,
-                Datum = new DateTime(),
+                Datum = DateTime.Now,
                 Betaald = winkelwagenDTO.Betaald,
                 Gebruiker = _gebruikerRepository.GetBy(User.Identity.Name)   
             };

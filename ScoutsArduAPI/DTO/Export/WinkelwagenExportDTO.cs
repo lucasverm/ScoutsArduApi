@@ -14,7 +14,7 @@ namespace ScoutsArduAPI.DTO
         public int DatumJaar { get; set; }
         public int DatumUur { get; set; }
         public int DatumMinuten { get; set; }
-
+        public DateTime Datum { get; set; }
         public List<WinkelwagenItemMtmExportDTO> Items { get; set; }
         public Boolean Betaald { get; set; }
         public GebruikerExportDTO Gebruiker { get; set; }
@@ -22,10 +22,11 @@ namespace ScoutsArduAPI.DTO
         public WinkelwagenExportDTO(Winkelwagen w)
         {
             this.Id = w.Id;
+            this.Datum = w.Datum;
             this.DatumDag = w.Datum.Day;
             this.DatumMaand = w.Datum.Month;
             this.DatumJaar = w.Datum.Year;
-            this.DatumUur = w.Datum.Hour;
+            this.DatumUur = w.Datum.Hour +1;
             this.DatumMinuten = w.Datum.Minute;
             this.Items = new List<WinkelwagenItemMtmExportDTO>();
             w.Items.ForEach(t =>
