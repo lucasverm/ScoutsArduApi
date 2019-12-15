@@ -10,14 +10,12 @@ namespace ScoutsArduAPI.DTO
     {
         public int Id { get; set; }
         public float Prijs { get; set; }
-        public int Aantal { get; set; }
         public String Naam { get; set; }
 
         public WinkelwagenItemExportDTO(WinkelwagenItem wi)
         {
             this.Id = wi.Id;
             this.Prijs = wi.Prijs;
-            this.Aantal = wi.Aantal;
             this.Naam = wi.Naam;
         }
     }

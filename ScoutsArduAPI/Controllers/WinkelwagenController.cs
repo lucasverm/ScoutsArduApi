@@ -69,21 +69,16 @@ namespace ScoutsArduAPI.Controllers
         {
             Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
             if (g == null) return NotFound();
+
             return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
+        
         }
 
-        /*[HttpGet("eerste")]
-        public ActionResult<WinkelwagenExportDTO> GetEerste()
-        {
-            Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
-            if (g == null) return NotFound();
-            return g.Winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList().Last();
-        }*/
-
         [HttpGet("stamhistoriek")]
-        public ActionResult<IEnumerable<Winkelwagen>> stamHistoriek()
+        public ActionResult<IEnumerable<WinkelwagenExportDTO>> stamHistoriek()
         {
-            return _winkelwagenRepository.GetAll().OrderBy(t => t.Datum).ToList();
+            var winkelwagens = _winkelwagenRepository.GetAll().OrderBy(t => t.Datum).ToList();
+            return winkelwagens.Select(t => new WinkelwagenExportDTO(_winkelwagenRepository.GetBy(t.Id))).ToList();
         }
 
         [AllowAnonymous]
@@ -95,15 +90,17 @@ namespace ScoutsArduAPI.Controllers
 
         [HttpPost]
         public ActionResult<WinkelwagenExportDTO> PostWinkelwagen(WinkelwagenDTO winkelwagenDTO)
-        {
-            List<WinkelwagenItem> items = new List<WinkelwagenItem>();
+        {      
+            List<MTMWinkelwagenWinkelwagenItem> items = new List<MTMWinkelwagenWinkelwagenItem>();
             foreach( var item in winkelwagenDTO.Items)
             {
                 WinkelwagenItem wi = _winkelwagenItemRepository.GetBy(item.Id);
                 if (wi == null)
                     return NotFound("het winkelwagenItem met id = " + item.Id.ToString() + " kon niet worden gevonden");
-                wi.Aantal = item.Aantal;
-                items.Add(wi);
+                MTMWinkelwagenWinkelwagenItem m = new MTMWinkelwagenWinkelwagenItem();
+                m.aantal = item.Aantal;
+                m.WinkelwagenItem = wi;
+                items.Add(m);
             }
 
             Winkelwagen winkelwagen = new Winkelwagen

@@ -10,7 +10,7 @@ namespace ScoutsArduAPI.DTO
     {
         public int Id { get; set; }
         public String Datum { get; set; }
-        public List<WinkelwagenItemExportDTO> Items { get; set; }
+        public List<WinkelwagenItemMtmDTO> Items { get; set; }
         public Boolean Betaald { get; set; }
         public GebruikerExportDTO Gebruiker { get; set; }
 
@@ -18,8 +18,12 @@ namespace ScoutsArduAPI.DTO
         {
             this.Id = w.Id;
             this.Datum = w.Datum;
-            this.Items = new List<WinkelwagenItemExportDTO>();
-            this.Items.AddRange(w.Items.Select(t => new WinkelwagenItemExportDTO(t)).ToList());
+            this.Items = new List<WinkelwagenItemMtmDTO>();
+            w.Items.ForEach(t =>
+            {
+                var dto = new WinkelwagenItemMtmDTO(t);
+                this.Items.Add(dto);
+            });
             this.Betaald = w.Betaald;
             this.Gebruiker = new GebruikerExportDTO(w.Gebruiker);
         }

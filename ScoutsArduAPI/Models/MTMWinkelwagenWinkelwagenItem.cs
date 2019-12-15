@@ -9,8 +9,6 @@ namespace ScoutsArduAPI.Models
     {
         public int Id { get; set; }
 
-        public Winkelwagen Winkelwagen { get; set; }
-
         public WinkelwagenItem WinkelwagenItem { get; set; }
 
         public int aantal { get; set; }
@@ -20,10 +18,10 @@ namespace ScoutsArduAPI.Models
 
         }
 
-        public MTMWinkelwagenWinkelwagenItem(Winkelwagen w, WinkelwagenItem wi)
+        public MTMWinkelwagenWinkelwagenItem(WinkelwagenItem wi, int aantal)
         {
-            this.Winkelwagen = w;
             this.WinkelwagenItem = wi;
+            this.aantal = aantal;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ScoutsArduAPI.Models
     public class Winkelwagen
     {
         public int Id { get; set; }
-        public List<WinkelwagenItem> Items { get; set; }
+        public List<MTMWinkelwagenWinkelwagenItem> Items { get; set; }
         public Boolean Betaald { get; set; }
         public String Datum { get; set; }
         public Gebruiker Gebruiker { get; set; }
