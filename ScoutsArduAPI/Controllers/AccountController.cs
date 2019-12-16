@@ -192,12 +192,12 @@ namespace ScoutsArduAPI.Controllers
         }
 
         [HttpPut]
-        public ActionResult<GebruikerExportDTO> PutGebruiker(string voornaam, string achternaam, string telnr)
+        public ActionResult<GebruikerExportDTO> PutGebruiker(GebruikerDTO dto)
         {
             Gebruiker g = _gebruikerRepository.GetBy(User.Identity.Name);
-            g.Achternaam = achternaam;
-            g.Voornaam = voornaam;
-            g.TelNr = telnr;
+            g.Achternaam = dto.achternaam;
+            g.Voornaam = dto.voornaam;
+            g.TelNr = dto.telnr;
             _gebruikerRepository.Update(g);
             _gebruikerRepository.SaveChanges();
             return new GebruikerExportDTO(g);
