@@ -35,21 +35,39 @@ namespace ScoutsArduAPI.Controllers
         } 
 
         [HttpGet("{id}")]
-        public ActionResult<Winkelwagen> GetWinkelwagen(int id)
+        public ActionResult<WinkelwagenExportDTO> GetWinkelwagen(int id)
         {
             Winkelwagen w = _winkelwagenRepository.GetBy(id);
             if (w == null) return NotFound();
-            return w;
+            return new WinkelwagenExportDTO(w);
+        }
+
+
+        [HttpPut("{id}/changeBetaald")]
+        public ActionResult<WinkelwagenExportDTO> ChangeBetaaldWinkelwagen(int id)
+        {
+            Winkelwagen w = _winkelwagenRepository.GetBy(id);
+            if (w == null) return NotFound();
+            if (w.Betaald == false)
+            {
+                w.Betaald = true;
+            } else
+            {
+                w.Betaald = false;
+            }
+            _winkelwagenRepository.Update(w);
+            _winkelwagenRepository.SaveChanges();
+            return new WinkelwagenExportDTO(w);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Winkelwagen> VerwijderWinkelwagen(int id)
+        public ActionResult<WinkelwagenExportDTO> VerwijderWinkelwagen(int id)
         {
             Winkelwagen w = _winkelwagenRepository.GetBy(id);
             if (w == null) return NotFound();
             _winkelwagenRepository.Delete(w);
             _winkelwagenRepository.SaveChanges();
-            return w;
+            return new WinkelwagenExportDTO(w);
         }
 
         [AllowAnonymous]
